@@ -1,113 +1,233 @@
-import Image from 'next/image'
+"use client";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import dynamic from "next/dynamic";
+import hipanda from "/public/hipanda.json";
+import avatar from "/public/avatar.png";
+import rabbit from "/public/rabbit.png";
+import pandapal from "/public/pandapal.png";
+import thinking from "/public/thinking.png";
+import writing from "/public/writing.png";
+import Image from "next/image";
+import ".//globals.css";
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
+  const [input, setInput] = useState("");
+  const [response, setResponse] = useState("");
+  const [conversation, setConversation] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
+  const [loadingImage, setLoadingImage] = useState(1);
+
+  useEffect(() => {
+    const storedConversation = localStorage.getItem("conversation");
+
+    if (storedConversation) {
+      setConversation(JSON.parse(storedConversation));
+
+      // Sätt showIntro till false om konversationen inte är tom
+      if (JSON.parse(storedConversation).length > 0) {
+        setShowIntro(false);
+      }
+    }
+  }, []);
+
+  // Uppdatera lokal lagring varje gång konversationen ändras
+  useEffect(() => {
+    localStorage.setItem("conversation", JSON.stringify(conversation));
+  }, [conversation]);
+
+  // Använd useEffect för att hantera showIntro-tillståndet baserat på konversationens längd
+  useEffect(() => {
+    if (conversation.length > 0) {
+      setShowIntro(false);
+    } else {
+      setShowIntro(true);
+    }
+  }, [conversation]);
+
+  function getDisplayRole(roles) {
+    switch (roles) {
+      case "user":
+        return "You";
+      case "assistant":
+        return "Panda";
+      default:
+        return roles;
+    }
+  }
+
+  function ConversationLine({ role, content }) {
+    const displayRole = getDisplayRole(role);
+    return (
+      <div className="flex items-start gap-2">
+        {displayRole === "Panda" && (
+          <div>
             <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+              src={avatar}
+              alt="Panda Avatar"
+              className="h-12 w-10 ml-1 rounded-md  border-2 border-white"
             />
-          </a>
+          </div>
+        )}
+        {displayRole === "You" && (
+          <div>
+            <Image
+              src={rabbit}
+              alt="Rabbit Avatar"
+              className="h-12 w-10 ml-1 rounded-md  border-2 border-white"
+            />
+          </div>
+        )}
+        <div className="text-start flex flex-col">
+          <div className="mb-1">
+            <p>{role}:</p>
+          </div>
+          <div className="w-80">{content}</div>
         </div>
       </div>
+    );
+  }
+  async function generatePositiveQuote() {
+    try {
+      setIsLoading(true);
+      const positiveQuotePrompt = `Generate a positive and motivational quote`;
+      const response = await axios.post(
+        `http://localhost:3003/api/generate-positive-quote`,
+        { prompt: positiveQuotePrompt }
+      );
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      console.log(response);
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+      const generatedQuote = response.data.generatedQuote;
+      const newConversation = [
+        ...conversation,
+        { role: `assistant`, content: generatedQuote },
+      ];
+      setConversation(newConversation);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+  async function handleSendMessage() {
+    try {
+      setIsLoading(true);
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+      console.log("Request to server:", { input, conversation });
+      const updatedUserConversation = [
+        ...conversation,
+        { role: "user", content: input },
+      ];
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      setConversation(updatedUserConversation);
+
+      const serverResponse = await axios.post(
+        "http://localhost:3003/api/send-message",
+        { input, conversation }
+      );
+
+      console.log("Full server response:", serverResponse);
+
+      const { response, conversation: updatedConversation } =
+        serverResponse.data;
+
+      console.log("Updated conversation from server:", updatedConversation);
+
+      const newConversation = [
+        ...updatedUserConversation,
+        { role: "assistant", content: response },
+      ];
+
+      console.log("New conversation to be set:", newConversation);
+
+      setConversation(newConversation);
+      setResponse(response);
+      setInput("");
+
+      localStorage.setItem("conversation", JSON.stringify(newConversation));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  function handleDeleteMessages() {
+    setConversation([]);
+    setResponse("");
+    setInput("");
+
+    localStorage.removeItem("conversation");
+  }
+  return (
+    <main className="flex min-h-screen text-white font-mono bg-sky-300">
+      <div className="text-center">
+        <Image src={pandapal} alt="PandaPal Logo" className="h-fit w-fit" />
+        {showIntro && (
+          <div className="mr-6">
+            <Lottie animationData={hipanda} />
+            <p>What´s on your mind today?</p>
+            <button
+              className="bg-[#F6AACB] hover:bg-pink-200 px-4 rounded-lg py-2"
+              onClick={generatePositiveQuote}
+            >
+              Give me a positive quote
+            </button>
+          </div>
+        )}
+        {!showIntro && (
+          <>
+            <button
+              className="bg-pink-400 hover:bg-pink-500 px-4 rounded-lg py-2"
+              onClick={handleDeleteMessages}
+            >
+              Delete Messages
+            </button>
+            <div className="flex flex-col items-start justify-evenly">
+              <div className="flex flex-col justify-start gap-2">
+                {conversation &&
+                  conversation.map((message, index) => (
+                    <ConversationLine
+                      key={index}
+                      role={getDisplayRole(message.role)}
+                      content={message.content}
+                    />
+                  ))}
+
+                {isLoading && (
+                  <div>
+                    <Image
+                      src={thinking}
+                      alt="Thinking Image"
+                      width={90}
+                      height={120}
+                      className={`loading-image ${isLoading ? "animate" : ""}`}
+                    />
+                    <p>Loading.....</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+        <div className="flex w-full justify-center mt-4 p-2 items-center gap-2 ">
+          <input
+            className="text-black px-5 py-2 rounded-xl"
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <button
+            className="bg-pink-300 hover:bg-pink-200 px-4 rounded-lg py-2"
+            onClick={handleSendMessage}
+          >
+            Send
+          </button>
+        </div>
       </div>
     </main>
-  )
+  );
 }

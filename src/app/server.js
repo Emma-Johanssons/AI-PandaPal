@@ -3,12 +3,19 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const OpenAI = require("openai");
 require("dotenv").config();
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
-const port = 3003;
+const port = process.env.PORT || 3003;
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://ai-panda-pal-qyxo.vercel.app"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
 app.get("/", (req, res) => {
   res.send("Server is running!");
 });
@@ -61,13 +68,7 @@ app.post("/api/generate-positive-quote", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-app.use(
-  cors({
-    origin: "*",
-    methods: "GET, HEAD, PUT, PATCH,POST, DELETE",
-    credentials: true,
-  })
-);
+
 app.use(bodyParser.json);
 
 app.listen(port, () => {

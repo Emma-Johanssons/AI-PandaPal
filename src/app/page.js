@@ -94,8 +94,10 @@ export default function Home() {
       setIsLoading(true);
       const positiveQuotePrompt = `Generate a positive and motivational quote`;
       const response = await axios.post(
-        `http://localhost:3003/api/generate-positive-quote`,
-        { prompt: positiveQuotePrompt }
+        "https://ai-panda-pal-qyxo.vercel.app/api/generate-positive-quote",
+        {
+          prompt: positiveQuotePrompt,
+        }
       );
 
       console.log(response);
@@ -126,8 +128,11 @@ export default function Home() {
       setConversation(updatedUserConversation);
 
       const serverResponse = await axios.post(
-        "http://localhost:3003/api/send-message",
-        { input, conversation }
+        "https://ai-panda-pal-qyxo.vercel.app/api/send-message",
+        {
+          input,
+          conversation,
+        }
       );
 
       console.log("Full server response:", serverResponse);

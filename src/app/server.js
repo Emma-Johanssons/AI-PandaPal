@@ -5,9 +5,10 @@ const OpenAI = require("openai");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 3003;
+const port = 3003;
 
 app.use(bodyParser.json());
+app.use(cors());
 app.get("/", (req, res) => {
   res.send("Server is running!");
 });
@@ -15,21 +16,6 @@ app.get("/", (req, res) => {
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-// Middleware för autentisering
-const authenticate = (req, res, next) => {
-  const apiKey = process.env.OPENAI_API_KEY;
-  const providedKey = req.headers.authorization;
-
-  if (providedKey === apiKey) {
-    next();
-  } else {
-    res.status(401).json({ error: "Unauthorized" });
-  }
-};
-
-// Använd middleware för att autentisera de följande routerna
-app.use(authenticate);
 
 app.post("/api/send-message", async (req, res) => {
   try {
@@ -41,7 +27,7 @@ app.post("/api/send-message", async (req, res) => {
           role: "system",
           content: "You are a supportive and empathetic friend and helper.",
         },
-        ...conversation,
+        ...conversation, // Hela konversationen skickas med varje anrop
         { role: "user", content: input },
       ],
       model: "gpt-3.5-turbo",
@@ -75,7 +61,6 @@ app.post("/api/generate-positive-quote", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 app.use(
   cors({
     origin: "http://localhost:3001",

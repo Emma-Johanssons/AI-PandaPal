@@ -63,7 +63,7 @@ app.post("/api/generate-positive-quote", async (req, res) => {
 });
 app.use(
   cors({
-    origin: "**",
+    origin: "*",
     methods: "GET, HEAD, PUT, PATCH,POST, DELETE",
     credentials: true,
   })

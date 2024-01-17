@@ -20,6 +20,10 @@ export default function Home() {
   const [showIntro, setShowIntro] = useState(true);
   const [loadingImage, setLoadingImage] = useState(1);
 
+  const apiUrl =
+    process.env.NODE_END === `development`
+      ? `https://localhost:3003`
+      : `https://pandapal-7b5c31619405.herokuapp.com`;
   useEffect(() => {
     const storedConversation = localStorage.getItem("conversation");
 
@@ -94,7 +98,7 @@ export default function Home() {
       setIsLoading(true);
       const positiveQuotePrompt = `Generate a positive and motivational quote`;
       const response = await axios.post(
-        `http://localhost:3003/api/generate-positive-quote`,
+        `${apiUrl}/api/generate-positive-quote`,
         { prompt: positiveQuotePrompt }
       );
 
@@ -125,10 +129,10 @@ export default function Home() {
 
       setConversation(updatedUserConversation);
 
-      const serverResponse = await axios.post(
-        "http://localhost:3003/api/send-message",
-        { input, conversation }
-      );
+      const serverResponse = await axios.post(`${apiUrl}/api/send-message`, {
+        input,
+        conversation,
+      });
 
       console.log("Full server response:", serverResponse);
 

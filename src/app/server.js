@@ -63,9 +63,12 @@ app.post("/api/generate-positive-quote", async (req, res) => {
 });
 app.use(
   cors({
-    origin: "http://localhost:3001",
+    origin: "**",
+    methods: "GET, HEAD, PUT, PATCH,POST, DELETE",
+    credentials: true,
   })
 );
+app.use(bodyParser.json);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

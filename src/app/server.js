@@ -8,7 +8,6 @@ const app = express();
 const port = 3003;
 
 app.use(bodyParser.json());
-app.use(cors());
 app.get("/", (req, res) => {
   res.send("Server is running!");
 });

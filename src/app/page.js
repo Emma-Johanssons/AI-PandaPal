@@ -168,15 +168,19 @@ export default function Home() {
     localStorage.removeItem("conversation");
   }
   return (
-    <main className="flex min-h-screen text-white font-mono bg-sky-300">
-      <div className="text-center">
-        <Image src={pandapal} alt="PandaPal Logo" className="h-fit w-fit" />
+    <main className="flex min-h-screen text-white font-mono bg-sky-300 md:items-center md:flex-col md:justify-center">
+      <div className="text-center md:flex md:flex-col md:items-center md:w-full md:gap-4">
+        <Image
+          src={pandapal}
+          alt="PandaPal Logo"
+          className="h-fit w-fit md:h-1/3 md:w-1/2"
+        />
         {showIntro && (
-          <div className="mr-6">
-            <Lottie animationData={hipanda} />
+          <div className=" ml-4 md:flex md:flex-col md:items-center md:translate-x-5">
             <p>What´s on your mind today?</p>
+            <Lottie className="md:w-1/3 mr-8" animationData={hipanda} />
             <button
-              className="bg-[#F6AACB] hover:bg-pink-200 px-4 rounded-lg py-2"
+              className="bg-[#F6AACB] hover:bg-pink-200 px-2 text-sm mr-4 mb-4 rounded-lg py-2"
               onClick={generatePositiveQuote}
             >
               Give me a positive quote
@@ -186,7 +190,7 @@ export default function Home() {
         {!showIntro && (
           <>
             <button
-              className="bg-pink-400 hover:bg-pink-500 px-4 rounded-lg py-2"
+              className="bg-pink-400 hover:bg-pink-500 px-4 mb-4 rounded-lg py-2"
               onClick={handleDeleteMessages}
             >
               Delete Messages
@@ -218,15 +222,14 @@ export default function Home() {
             </div>
           </>
         )}
-        <div className="flex w-full justify-center mt-4 p-2 items-center gap-2 ">
-          <input
-            className="text-black px-5 py-2 rounded-xl"
-            type="text"
+        <div className="flex flex-col md:flex-row w-full justify-center p-6 items-center gap-2  md:translate-x-14 ">
+          <textarea
+            className="text-black px-5 md:w-96 w-60 py-2 rounded-xl resize-none"
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
           <button
-            className="bg-pink-300 hover:bg-pink-200 px-4 rounded-lg py-2"
+            className="bg-pink-300 hover:bg-pink-200 px-4 rounded-xl py-2 md:px-8"
             onClick={handleSendMessage}
           >
             Send

@@ -170,7 +170,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen text-white font-mono bg-sky-300 md:items-center md:flex-col md:justify-center">
       <div className="text-center md:flex md:flex-col md:items-center md:w-full md:gap-4">
-        <div className="translate-x-8">
+        <div className="md:translate-x-8">
           <Image
             src={pandapal}
             alt="PandaPal Logo"

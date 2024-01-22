@@ -170,17 +170,22 @@ export default function Home() {
   return (
     <main className="flex min-h-screen text-white font-mono bg-sky-300 md:items-center md:flex-col md:justify-center">
       <div className="text-center md:flex md:flex-col md:items-center md:w-full md:gap-4">
-        <Image
-          src={pandapal}
-          alt="PandaPal Logo"
-          className="h-fit w-fit md:h-1/3 md:w-1/2"
-        />
+        <div className="translate-x-8">
+          <Image
+            src={pandapal}
+            alt="PandaPal Logo"
+            className="h-fit w-fit md:h-1/3 md:w-full md:-translate-x-10 "
+          />
+        </div>
         {showIntro && (
-          <div className=" ml-4 md:flex md:flex-col md:items-center md:translate-x-5">
+          <div className=" md:flex md:flex-col md:items-center">
             <p>What´s on your mind today?</p>
-            <Lottie className="md:w-1/3 mr-8" animationData={hipanda} />
+            <Lottie
+              className="md:w-1/3 -translate-x-5  "
+              animationData={hipanda}
+            />
             <button
-              className="bg-[#F6AACB] hover:bg-pink-200 px-2 text-sm mr-4 mb-4 rounded-lg py-2"
+              className="bg-[#F6AACB] hover:bg-pink-200 px-2 text-sm  mb-4 rounded-lg py-2"
               onClick={generatePositiveQuote}
             >
               Give me a positive quote
@@ -222,7 +227,7 @@ export default function Home() {
             </div>
           </>
         )}
-        <div className="flex flex-col md:flex-row w-full justify-center p-6 items-center gap-2  md:translate-x-14 ">
+        <div className="flex flex-col md:flex-row w-full justify-center p-6 items-center gap-2  md:translate-x-12">
           <textarea
             className="text-black px-5 md:w-96 w-60 py-2 rounded-xl resize-none"
             value={input}

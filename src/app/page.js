@@ -94,7 +94,7 @@ export default function Home() {
       setIsLoading(true);
       const positiveQuotePrompt = `Generate a positive and motivational quote`;
       const response = await axios.post(
-        "https://whispering-thicket-03323-f95e6deef2d1.herokuapp.com/api/generate-positive-quote",
+        "https://pandapal-b0ca9c9f13f9.herokuapp.com/api/generate-positive-quote",
         {
           prompt: positiveQuotePrompt,
         }
@@ -128,7 +128,7 @@ export default function Home() {
       setConversation(updatedUserConversation);
 
       const serverResponse = await axios.post(
-        "https://whispering-thicket-03323-f95e6deef2d1.herokuapp.com/api/send-message",
+        "https://pandapal-b0ca9c9f13f9.herokuapp.com/api/send-message",
         {
           input,
           conversation,

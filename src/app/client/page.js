@@ -9,7 +9,7 @@ import pandapal from "/public/pandapal.png";
 import thinking from "/public/thinking.png";
 import writing from "/public/writing.png";
 import Image from "next/image";
-import ".//globals.css";
+import "..//globals.css";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function Home() {
@@ -94,9 +94,14 @@ export default function Home() {
       setIsLoading(true);
       const positiveQuotePrompt = `Generate a positive and motivational quote`;
       const response = await axios.post(
-        "https://pandapal-b0ca9c9f13f9.herokuapp.com/api/generate-positive-quote",
+        "https://ai-pandapal.web.app/api/generate-positive-quote",
         {
           prompt: positiveQuotePrompt,
+        },
+        {
+          params: {
+            _cacheBuster: Date.now(), // Append a timestamp as a query parameter
+          },
         }
       );
 
@@ -128,10 +133,15 @@ export default function Home() {
       setConversation(updatedUserConversation);
 
       const serverResponse = await axios.post(
-        "https://pandapal-b0ca9c9f13f9.herokuapp.com/api/send-message",
+        "https://ai-pandapal.web.app/api/send-message",
         {
           input,
           conversation,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          },
         }
       );
 

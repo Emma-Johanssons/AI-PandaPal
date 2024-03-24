@@ -1,5 +1,5 @@
 [[redirects]]
   from = "/api/*"
-  to = "https://pandapal-b0ca9c9f13f9.herokuapp.com/api/:splat"
+  to = "https://us-central1-ai-pandapal.cloudfunctions.net/app/api/:splat"
   status = 200
   force = true

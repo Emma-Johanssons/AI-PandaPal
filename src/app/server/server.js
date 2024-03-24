@@ -14,7 +14,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://ai-panda-pal-qyxo.vercel.app/",
+      "https://ai-panda-pal-qyxo.vercel.app/client",
       "http://localhost:3001",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",

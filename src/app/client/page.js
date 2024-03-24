@@ -94,7 +94,7 @@ export default function Home() {
       setIsLoading(true);
       const positiveQuotePrompt = `Generate a positive and motivational quote`;
       const response = await axios.post(
-        "https://ai-pandapal.web.app/api/generate-positive-quote",
+        "https://us-central1-ai-pandapal.cloudfunctions.net/app/api/generate-positive-quote",
         {
           prompt: positiveQuotePrompt,
         },
@@ -133,7 +133,7 @@ export default function Home() {
       setConversation(updatedUserConversation);
 
       const serverResponse = await axios.post(
-        "https://ai-pandapal.web.app/api/send-message",
+        "https://us-central1-ai-pandapal.cloudfunctions.net/app/api/send-message",
         {
           input,
           conversation,
